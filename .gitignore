@@ -1,0 +1,8 @@
+.env
+.env.example
+
+README.md
+
+*.db
+
+bin/

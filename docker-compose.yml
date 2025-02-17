@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  janus-processor:
+    build: .
+    container_name: janus-processor
+    volumes:
+      - /opt/janus/share/janus/recordings:/opt/janus/share/janus/recordings
+      - ./data/logs:/var/log/janus-processor
+    environment:
+      - R2_BUCKET=${R2_BUCKET}
+      - R2_ACCOUNT_ID=${R2_ACCOUNT_ID}
+      - R2_ACCESS_KEY_ID=${R2_ACCESS_KEY_ID}
+      - R2_ACCESS_KEY_SECRET=${R2_ACCESS_KEY_SECRET}
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped

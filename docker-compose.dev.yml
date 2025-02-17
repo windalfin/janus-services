@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  janus-processor:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: janus-processor
+    volumes:
+      # Mount the recordings directory from host
+      - /opt/janus/share/janus/recordings:/recordings:rw
+      # Mount logs directory
+      - ./data/logs:/var/log/janus-processor
+      # For development, mount source code
+      - .:/app
+      - go-modules:/go/pkg/mod
+    environment:
+      - JANUS_RECORDINGS_PATH=/recordings
+      - JANUS_PP_REC_PATH=/usr/local/bin/janus-pp-rec  # Path on host
+      - R2_BUCKET=${R2_BUCKET}
+      - R2_ACCOUNT_ID=${R2_ACCOUNT_ID}
+      - R2_ACCESS_KEY_ID=${R2_ACCESS_KEY_ID}
+      - R2_ACCESS_KEY_SECRET=${R2_ACCESS_KEY_SECRET}
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  go-modules:
