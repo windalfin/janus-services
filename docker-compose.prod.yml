@@ -4,7 +4,7 @@ services:
   janus-processor:
     build: 
       context: .
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     container_name: janus-processor-prod
     volumes:
       - /opt/janus/share/janus/recordings:/opt/janus/share/janus/recordings:ro
