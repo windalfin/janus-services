@@ -38,7 +38,11 @@ COPY --from=builder /app/janus-services .
 # Create necessary directories
 RUN mkdir -p /recordings \
     && mkdir -p /var/log/janus-processor \
-    && chown -R appuser:appuser /app /recordings /var/log/janus-processor
+    && mkdir -p /opt/janus/share/janus/recordings \
+    && chown -R appuser:appuser /app /recordings /var/log/janus-processor /opt/janus/share/janus/recordings
+
+# Set environment variable for janus-pp-rec path
+ENV JANUS_PP_REC_PATH=/usr/local/bin/janus-pp-rec
 
 # Switch to non-root user
 USER appuser
