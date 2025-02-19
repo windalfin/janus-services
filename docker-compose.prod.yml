@@ -9,6 +9,7 @@ services:
     volumes:
       - /opt/janus/share/janus/recordings:/opt/janus/share/janus/recordings:ro
       - /var/log/janus-processor:/var/log/janus-processor
+      - /usr/local/bin/janus-pp-rec:/usr/local/bin/janus-pp-rec:ro
     ports:
       - "8080:8080"
     environment:
@@ -17,6 +18,11 @@ services:
       - R2_ACCESS_KEY_ID=${R2_ACCESS_KEY_ID}
       - R2_ACCESS_KEY_SECRET=${R2_ACCESS_KEY_SECRET}
       - ENVIRONMENT=production
+      - JANUS_RECORDINGS_PATH=/opt/janus/share/janus/recordings
+      - JANUS_PROCESSED_PATH=/opt/janus/share/janus/recordings/processed
+      - JANUS_PP_REC_PATH=/usr/local/bin/janus-pp-rec
+      - PROCESSING_INTERVAL=60
+    command: ["./janus-services", "-interval", "60"]
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
       interval: 30s
